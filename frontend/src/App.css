@@ -1,0 +1,634 @@
+/* =========================================
+   1. THEME ENGINE & ANIMATED BACKGROUNDS
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap');
+
+/* Define CSS Variables for the default (Light) theme */
+:root {
+  /* --- Light Mode (Holo-Day) Colors --- */
+  --bg-body: #f0f4f8;
+  --bg-card: rgba(255, 255, 255, 0.7); /* High transparency for glass effect */
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-nav: rgba(255, 255, 255, 0.9);
+  
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+  
+  --primary: #06b6d4;        /* Main Cyan Brand Color */
+  --primary-glow: rgba(6, 182, 212, 0.4); /* Used for shadows/glows */
+  --accent: #f59e0b;         /* Amber for highlights */
+  
+  --border: rgba(255, 255, 255, 0.6); /* Semi-transparent border */
+  --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); /* Soft, colored shadow */
+  
+  --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4));
+}
+
+/* Overrides for Dark Mode when <html data-theme='dark'> is active */
+[data-theme='dark'] {
+  /* --- Dark Mode (Cyber-Night) Colors --- */
+  --bg-body: #0a0e17;
+  --bg-card: rgba(30, 41, 59, 0.6);
+  --bg-glass: rgba(15, 23, 42, 0.85);
+  --bg-nav: rgba(10, 14, 23, 0.9);
+  
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  
+  --primary: #22d3ee;        /* Brighter Neon Cyan for dark backgrounds */
+  --primary-glow: rgba(34, 211, 238, 0.3);
+  --accent: #fbbf24;
+  
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+  
+  --card-gradient: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.6));
+}
+
+/* =========================================
+   2. GLOBAL RESET & UTILITIES
+   ========================================= */
+* { box-sizing: border-box; outline: none; }
+
+body {
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-body);
+  
+  /* Creates the subtle mesh gradient blobs in the background */
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(189,100%,56%,0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(33,100%,53%,0.1) 0px, transparent 50%);
+    
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.5s ease; /* Smooth fade when switching themes */
+}
+
+/* Custom Scrollbar Styling (Webkit browsers like Chrome/Edge) */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-body); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+/* Reusable Glassmorphism Utility Class */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);       /* The magic blur effect behind the element */
+  -webkit-backdrop-filter: blur(12px); /* Safari support */
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.App { display: flex; flex-direction: column; min-height: 100vh; }
+.section-container { max-width: 1240px; margin: 60px auto; padding: 0 25px; position: relative; }
+
+/* =========================================
+   3. HEADER & SEARCH
+   ========================================= */
+.main-header {
+  background: var(--bg-nav);
+  backdrop-filter: blur(16px); /* Strong blur for sticky feel */
+  border-bottom: 1px solid var(--border);
+  position: relative; 
+  z-index: 1001;
+  padding: 15px 0;
+  transition: all 0.3s ease;
+}
+
+.header-content {
+  max-width: 1240px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 25px;
+}
+
+.logo-section {
+  font-size: 28px; font-weight: 900;
+  letter-spacing: -1px; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* Search Bar Styling */
+.search-container { flex: 1; max-width: 450px; margin: 0 40px; position: relative; }
+
+.search-input {
+  width: 100%; padding: 14px 20px;
+  background: var(--bg-body);
+  border: 2px solid transparent; border-radius: 50px;
+  color: var(--text-main); font-size: 15px;
+  transition: all 0.3s;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); /* Inner shadow for depth */
+}
+
+/* Glow effect when user types in search */
+.search-input:focus { 
+  background: var(--bg-card); 
+  border-color: var(--primary); 
+  box-shadow: 0 0 15px var(--primary-glow); 
+}
+
+.search-button {
+  position: absolute; right: 5px; top: 5px; bottom: 5px;
+  border-radius: 50px; padding: 0 25px;
+  background: var(--primary); color: white;
+  font-weight: 700;
+}
+
+/* =========================================
+   4. NAVIGATION BAR (FIXED + BLUR)
+   ========================================= */
+.main-nav {
+  background: var(--bg-nav);
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px); 
+  border-bottom: 1px solid var(--border);
+  position: sticky; /* Sticks to top of screen on scroll */
+  top: 0; 
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1240px; margin: 0 auto;
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding: 0 25px; height: 60px;
+}
+
+.nav-left { 
+  display: flex; 
+  list-style: none; padding: 0; margin: 0; gap: 10px; 
+}
+
+.nav-right { display: flex; align-items: center; gap: 20px; }
+
+.nav-item a {
+  display: block; padding: 10px 15px;
+  color: var(--text-muted); font-weight: 600; text-transform: uppercase;
+  font-size: 13px; letter-spacing: 1px;
+  position: relative; transition: color 0.3s;
+}
+
+.nav-item:hover a, .nav-item.active a { color: var(--primary); }
+
+/* Animated underline effect for nav links */
+.nav-item a::after {
+  content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 3px;
+  background: var(--primary); 
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy transition */
+  transform: translateX(-50%); border-radius: 5px 5px 0 0;
+}
+
+/* Expands the underline on hover or active */
+.nav-item:hover a::after, .nav-item.active a::after { width: 80%; }
+
+.logout-link { color: #ef4444 !important; font-weight: 700; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 5px; }
+
+/* =========================================
+   5. HERO SLIDER (SIMPLE CLEAN)
+   ========================================= */
+.hero-slider {
+    position: relative;
+    height: 500px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 20px 40px -10px var(--shadow);
+    background: #000;
+}
+
+/* Individual Slide Logic */
+.slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 1s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+
+/* Dark overlay on image so text pops */
+.slide::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(0,0,0,0.4);
+}
+
+.slide.active { opacity: 1; z-index: 1; }
+
+.slide-content {
+    position: relative; z-index: 2;
+    max-width: 1200px; margin: 0 auto; padding: 0 40px; width: 100%;
+    color: white;
+}
+
+/* Animation for Slide Text */
+.slide-title {
+    font-size: 56px; font-weight: 900; margin: 0 0 10px;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transform: translateY(20px); opacity: 0; transition: 0.5s 0.3s;
+}
+
+.slide-subtitle {
+    font-size: 24px; margin-bottom: 25px;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    transform: translateY(20px); opacity: 0; transition: 0.5s 0.5s;
+}
+
+/* Trigger animations when slide is active */
+.slide.active .slide-title,
+.slide.active .slide-subtitle {
+    transform: translateY(0); opacity: 1;
+}
+
+.slide-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+.slide-btn:hover { transform: scale(1.05); }
+
+/* Navigation Dots at bottom of slider */
+.slider-dots {
+    position: absolute; bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 10px; z-index: 2;
+}
+
+.dot {
+    width: 12px; height: 12px; background: rgba(255,255,255,0.5);
+    border-radius: 50%; cursor: pointer; transition: 0.3s;
+}
+.dot.active { background: white; transform: scale(1.3); }
+
+/* =========================================
+   6. CARDS & GRID
+   ========================================= */
+/* Responsive Grids */
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; }
+
+/* Product/Service Card Styling */
+.card {
+  background: var(--card-gradient);
+  border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden; position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(5px);
+}
+
+/* Hover Effect: Lift up and glow */
+.card:hover { 
+  transform: translateY(-10px) scale(1.02); 
+  box-shadow: 0 20px 40px var(--shadow); 
+  border-color: var(--primary); 
+}
+
+.product-card { padding: 25px; height: 100%; display: flex; flex-direction: column; }
+
+/* Product Image Rotation on Hover */
+.product-img { 
+  height: 200px; width: 100%; object-fit: contain; margin-bottom: 20px; 
+  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); 
+  transition: transform 0.5s ease; 
+}
+.card:hover .product-img { transform: scale(1.1) rotate(2deg); }
+
+.product-title { font-size: 18px; font-weight: 700; margin-bottom: 5px; }
+.product-price { font-size: 22px; font-weight: 800; color: var(--primary); text-shadow: 0 0 20px var(--primary-glow); }
+
+/* Buttons inside Card */
+.btn-group { display: flex; gap: 15px; margin-top: auto; padding-top: 15px; }
+.btn-cart { 
+  padding: 12px; border-radius: 5px; font-weight: 700; cursor: pointer; 
+  transition: all 0.3s; background: transparent; 
+  border: 2px solid var(--border); color: var(--text-main); 
+}
+.btn-cart:hover { border-color: var(--primary); color: var(--primary); background: rgba(6, 182, 212, 0.05); }
+
+.btn-buy { 
+  flex: 1; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; 
+  background: linear-gradient(135deg, var(--primary), #3b82f6); border: none; color: white; 
+  box-shadow: 0 4px 15px var(--primary-glow); transition: 0.3s; 
+}
+.btn-buy:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--primary-glow); }
+
+.wishlist-btn { 
+  position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; 
+  border-radius: 50%; background: var(--bg-body); color: var(--text-muted); 
+  display: flex; align-items: center; justify-content: center; font-size: 20px; 
+  cursor: pointer; transition: all 0.3s; border: 1px solid var(--border); 
+}
+.wishlist-btn:hover { color: #ef4444; transform: scale(1.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+
+/* =========================================
+   7. SUPER SALE BANNER
+   ========================================= */
+.super-sale-banner {
+  margin: 60px 0; padding: 60px; border-radius: 30px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(245, 158, 11, 0.1));
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: space-between;
+  backdrop-filter: blur(20px);
+}
+
+/* Rotating Background Element for Banner */
+.super-sale-banner::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 60%);
+  animation: rotateBG 10s linear infinite; z-index: 0; pointer-events: none;
+}
+@keyframes rotateBG { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.sale-text-content { z-index: 2; position: relative; }
+.sale-heading { 
+  font-size: 5rem; font-weight: 900; line-height: 0.9; 
+  background: linear-gradient(to right, var(--text-main), var(--primary)); 
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+  margin-bottom: 10px; 
+}
+.sale-subheading { font-size: 24px; color: var(--text-muted); font-weight: 500; }
+
+/* The circular badge on the right */
+.sale-badge-container {
+  width: 180px; height: 180px; background: var(--bg-card); border: 2px solid var(--primary);
+  border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; transform: rotate(10deg); box-shadow: 0 0 30px var(--primary-glow);
+  animation: float 4s ease-in-out infinite; /* Bobbing animation */
+}
+@keyframes float { 
+  0%, 100% { transform: translateY(0) rotate(10deg); } 
+  50% { transform: translateY(-15px) rotate(10deg); } 
+}
+.sale-badge-percent { font-size: 48px; font-weight: 800; color: var(--primary); line-height: 1; }
+
+/* =========================================
+   8. LOGIN PAGE
+   ========================================= */
+.login-container { 
+  min-height: 85vh; 
+  display: flex; align-items: center; justify-content: center; padding: 20px; 
+  background: radial-gradient(at 0% 100%, hsla(189,100%,56%,0.2) 0px, transparent 50%), 
+              radial-gradient(at 100% 0%, hsla(33,100%,53%,0.2) 0px, transparent 50%); 
+}
+
+.login-card-wrapper { 
+  background: var(--bg-card); backdrop-filter: blur(20px); 
+  border: 1px solid var(--border); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
+  border-radius: 24px; display: flex; width: 100%; max-width: 900px; min-height: 550px; overflow: hidden; 
+}
+
+.login-image-section { 
+  flex: 1; position: relative; 
+  background: url('https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80') center/cover; 
+  display: flex; align-items: flex-end; padding: 40px; color: white; 
+}
+.login-image-section::after { 
+  content: ''; position: absolute; inset: 0; 
+  background: linear-gradient(to top, var(--primary) 0%, transparent 100%); opacity: 0.8; 
+}
+
+.login-form-section { flex: 1; padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+
+.login-input { 
+  width: 100%; padding: 16px; margin-bottom: 20px; 
+  background: var(--bg-body); border: 2px solid transparent; border-radius: 12px; 
+  color: var(--text-main); transition: 0.3s; 
+}
+.login-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); }
+
+.login-btn { 
+  width: 100%; padding: 16px; 
+  background: linear-gradient(90deg, var(--primary), #3b82f6); 
+  color: white; font-weight: bold; border-radius: 12px; font-size: 16px; cursor: pointer; transition: 0.3s; 
+}
+.login-btn:hover { letter-spacing: 1px; box-shadow: 0 10px 20px var(--primary-glow); }
+
+/* =========================================
+   9. MISC
+   ========================================= */
+/* Toast Notification Slide-In */
+/* --- Dark Theme Variables --- */
+:root {
+  /* Background is dark charcoal, Text is off-white */
+  --toast-bg: rgba(30, 41, 59, 0.95); /* #1e293b */
+  --toast-border: rgba(255, 255, 255, 0.1);
+  --toast-text-main: #f8fafc;
+  --toast-text-sub: #94a3b8;
+
+  /* Neon/Pastel Accents for Dark Mode Contrast */
+  --success-bg: rgba(16, 185, 129, 0.2); --success-text: #34d399; /* Emerald */
+  --error-bg:   rgba(239, 68, 68, 0.2);  --error-text:   #f87171; /* Red */
+  --warning-bg: rgba(245, 158, 11, 0.2); --warning-text: #fbbf24; /* Amber */
+  --info-bg:    rgba(59, 130, 246, 0.2); --info-text:    #60a5fa; /* Blue */
+}
+
+/* --- The Card Container --- */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  min-width: 320px;
+  padding: 16px;
+  z-index: 1000;
+  
+  /* Dark Glassmorphism */
+  background: var(--toast-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* Subtle light border to define edges in the dark */
+  border: 1px solid var(--toast-border);
+  border-radius: 16px;
+  
+  /* Deep shadow for dark mode depth */
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.5),
+    0 4px 6px -2px rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  
+  animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- The Icon Bubbles (Glowing Effect) --- */
+.toast-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: bold;
+  font-family: sans-serif;
+  
+  /* Add a slight glow to the icon bubble */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* Apply colors */
+.toast-success .toast-icon-wrapper { background: var(--success-bg); color: var(--success-text); }
+.toast-error   .toast-icon-wrapper { background: var(--error-bg);   color: var(--error-text); }
+.toast-warning .toast-icon-wrapper { background: var(--warning-bg); color: var(--warning-text); }
+.toast-info    .toast-icon-wrapper { background: var(--info-bg);    color: var(--info-text); }
+
+.toast-icon { font-size: 18px; }
+
+/* --- Text Content --- */
+.toast-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.toast-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  color: var(--toast-text-sub); /* Muted gray for label */
+  margin-bottom: 4px;
+}
+
+.toast-message {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--toast-text-main); /* Bright white for message */
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* --- Close Button --- */
+.toast-close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--toast-text-sub);
+  font-size: 24px;
+  line-height: 1;
+  padding: 0 4px;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.toast-close-btn:hover {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* --- Animation --- */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   10. FOOTER
+   ========================================= */
+.main-footer {
+    margin-top: auto;
+    padding: 80px 0 0;
+    background: var(--bg-body);
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 10;
+}
+
+.footer-content {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr; /* 4 Columns with specific ratios */
+    gap: 40px;
+    padding: 0 25px 60px;
+}
+
+.footer-col h4 {
+    color: var(--text-main);
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.footer-desc {
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-size: 14px;
+    max-width: 300px;
+}
+
+.footer-links { list-style: none; padding: 0; margin: 0; }
+.footer-links li { margin-bottom: 12px; }
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+    position: relative;
+}
+
+.footer-links a:hover { color: var(--primary); padding-left: 5px; }
+
+.contact-list { list-style: none; padding: 0; margin: 0; }
+.contact-list li {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.copyright-bar {
+    text-align: center;
+    padding: 25px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-muted);
+    background: rgba(0,0,0,0.02);
+}
+
+/* =========================================
+   11. RESPONSIVENESS
+   ========================================= */
+/* Tablet footer adjustment */
+@media (max-width: 900px) {
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .header-content, .nav-container { flex-direction: column; height: auto; padding: 10px; }
+  .nav-left { flex-wrap: wrap; justify-content: center; }
+  .login-card-wrapper { flex-direction: column; }
+  .login-image-section { display: none; }
+  .sale-heading { font-size: 3rem; }
+  .super-sale-banner { flex-direction: column; text-align: center; gap: 30px; }
+  .dashboardContainer { flex-direction: column; }
+  .footer-content { grid-template-columns: 1fr; text-align: center; }
+  .brand-col { align-items: center; display: flex; flex-direction: column; }
+  .contact-list li { justify-content: center; }
+}

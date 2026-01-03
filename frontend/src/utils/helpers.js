@@ -1,0 +1,1 @@
+export const parsePrice = (priceStr) => parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
