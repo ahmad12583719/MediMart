@@ -129,8 +129,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 ### 🤝 Contributing 
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/ahmad12583719/MediMart/issues). 
-
+Contributions, issues, and feature requests are welcome! 
 ### 📝 License 
 
 This project is licensed under the ISC License. See the [LICENSE](LICENSE) file for details. 
