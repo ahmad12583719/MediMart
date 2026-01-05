@@ -1,9 +1,6 @@
 # MediMart: Your One-Stop Online Pharmacy 
-
-![MediMart Banner](https://user-images.githubusercontent.com/12583719/208121952-45219159-25cb-485a-8b48-350284f1659c.png) 
-
-![MediMart Home Page](https://user-images.githubusercontent.com/12583719/208123894-6291c070-6921-4467-9958-3f535359a60e.png) 
-
+![MediMart](MediMart.png)
+![MediMart (Dark-Theme)](<MediMart 1.png>)
 ##  фармацевтическая революция началась! 
 
 Welcome to **MediMart**, a cutting-edge, full-stack MERN e-commerce platform designed to revolutionize the way you access pharmaceutical products. Our mission is to provide a seamless, secure, and user-friendly experience for all your healthcare needs. 
