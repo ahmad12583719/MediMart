@@ -1,1 +1,9 @@
-export const parsePrice = (priceStr) => parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
+export const parsePrice = (price) => {
+  if (typeof price === 'number') {
+    return price;
+  }
+  if (typeof price === 'string') {
+    return parseFloat(price.replace(/[^\d.]/g, '')) || 0;
+  }
+  return 0;
+};
