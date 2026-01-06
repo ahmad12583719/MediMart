@@ -136,4 +136,4 @@ This project is licensed under the ISC License. See the [LICENSE](LICENSE) file 
 
 ---
 
-Made with ❤️ by [ahmad12583719](https://github.com/ahmad12583719) 
+Made with ❤️ by [ahmad12583719](https://github.com/ahmad12583719) & [Farhan-4136](https://github.com/Farhan-4136)
